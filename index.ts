@@ -1,0 +1,1 @@
+import open = require('./node_modules/open');
