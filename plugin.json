@@ -1,0 +1,12 @@
+{
+  "$schema": "https://www.flowlauncher.com/schemas/plugin.schema.json",
+  "ID": "d2389086abe1495a8b476f39aa5c7b6f",
+  "ActionKeywords": ["jwt"],
+  "Name": "JWT Decoder",
+  "Description": "Plugin that decodes JWT tokens into readable payloads.",
+  "Author": "Crakzzy",
+  "Version": "0.0.1",
+  "Language": "javascript",
+  "ExecuteFileName": "./dist/index.js",
+  "IcoPath": "./icon.png"
+}
