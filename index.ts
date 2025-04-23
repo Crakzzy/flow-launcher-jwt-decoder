@@ -1,8 +1,11 @@
 import {Flow} from 'flow-plugin';
 import * as jwt from 'jsonwebtoken';
 import {JwtHeader} from "jsonwebtoken";
+import childProcess from "child_process";
 
 const flow = new Flow({keepOrder: true, icon: "./icon.png"});
+
+const copy = (content: string) => childProcess.spawn("clip").stdin.end(content);
 
 enum JWTParts {
     HEADER = 0,
@@ -29,19 +32,34 @@ flow.on('query', ({prompt}, response) => {
             return;
         }
 
+        const decodedHeader = decodeJWT(prompt, JWTParts.HEADER);
         response.add({
             title: "Decoded header",
-            subtitle: decodeJWT(prompt, JWTParts.HEADER),
+            subtitle: decodedHeader,
+            jsonRPCAction: {
+                method: "copy_result",
+                parameters: [decodedHeader],
+            }
         });
 
+        const decodedPayload = decodeJWT(prompt, JWTParts.PAYLOAD);
         response.add({
             title: "Decoded payload",
-            subtitle: decodeJWT(prompt, JWTParts.PAYLOAD),
+            subtitle: decodedPayload,
+            jsonRPCAction: {
+                method: "copy_result",
+                parameters: [decodedPayload],
+            }
         });
 
+        const decodedSignature = decodeJWT(prompt, JWTParts.SIGNATURE);
         response.add({
             title: "Decoded signature",
-            subtitle: decodeJWT(prompt, JWTParts.SIGNATURE),
+            subtitle: decodedSignature,
+            jsonRPCAction: {
+                method: "copy_result",
+                parameters: [decodedSignature],
+            }
         });
 
     } catch (error) {
@@ -50,6 +68,10 @@ flow.on('query', ({prompt}, response) => {
             subtitle: error instanceof Error ? error.message : "Unknown error",
         });
     }
+});
+
+flow.on("copy_result", ({parameters}) => {
+    copy(parameters.toString());
 });
 
 function decodeJWT(token: string, type: JWTParts): string {
