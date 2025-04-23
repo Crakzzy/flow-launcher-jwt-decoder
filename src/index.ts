@@ -1,17 +1,8 @@
 import {Flow} from 'flow-plugin';
-import * as jwt from 'jsonwebtoken';
-import {JwtHeader} from "jsonwebtoken";
-import childProcess from "child_process";
+import {copy, decodeJWT} from "./functions.js";
+import {JWTParts} from "./types.js";
 
 const flow = new Flow({keepOrder: true, icon: "./icon.png"});
-
-const copy = (content: string) => childProcess.spawn("clip").stdin.end(content);
-
-enum JWTParts {
-    HEADER = 0,
-    PAYLOAD = 1,
-    SIGNATURE = 2,
-}
 
 flow.on('query', ({prompt}, response) => {
 
@@ -73,48 +64,3 @@ flow.on('query', ({prompt}, response) => {
 flow.on("copy_result", ({parameters}) => {
     copy(parameters.toString());
 });
-
-function decodeJWT(token: string, type: JWTParts): string {
-    try {
-        switch (type) {
-            case JWTParts.HEADER: {
-                return decodeHeader(token);
-            }
-            case JWTParts.PAYLOAD: {
-                return decodePayload(token);
-            }
-            case JWTParts.SIGNATURE: {
-                return decodeSignature(token);
-            }
-        }
-    } catch (error) {
-        return "Error decoding JWT part";
-    }
-}
-
-function decodeHeader(token: string): string {
-    const header: JwtHeader | undefined = jwt.decode(token, {complete: true})?.header;
-
-    if (!header) {
-        return "Invalid JWT";
-    }
-    return JSON.stringify(header);
-}
-
-function decodePayload(token: string): string {
-    const payload = jwt.decode(token);
-
-    if (!payload) {
-        return "Invalid JWT";
-    }
-    return JSON.stringify(payload);
-}
-
-function decodeSignature(token: string): string {
-    const signature = jwt.decode(token, {complete: true})?.signature;
-
-    if (!signature) {
-        return "Invalid JWT";
-    }
-    return signature.toString();
-}
