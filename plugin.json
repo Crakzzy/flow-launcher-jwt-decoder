@@ -5,8 +5,9 @@
   "Name": "JWT Decoder",
   "Description": "Plugin that decodes JWT tokens into readable payloads.",
   "Author": "Crakzzy",
-  "Version": "0.0.1",
+  "Version": "1.0.0",
   "Language": "javascript",
   "ExecuteFileName": "./dist/index.js",
+  "Website": "https://github.com/Crakzzy/flow-launcher-jwt-decoder",
   "IcoPath": "./icon.png"
 }

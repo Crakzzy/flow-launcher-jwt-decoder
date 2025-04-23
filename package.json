@@ -19,9 +19,7 @@
   },
   "dependencies": {
     "@types/node": "^22.14.1",
-    "flow-launcher-helper": "^2.2.0",
     "flow-plugin": "^1.4.0",
-    "jsonwebtoken": "^9.0.2",
-    "open": "^10.1.1"
+    "jsonwebtoken": "^9.0.2"
   }
 }
