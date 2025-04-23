@@ -15,10 +15,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Node.Js
         uses: actions/setup-node@v2
         with:
           node-version: '20.10.0'
+
       - name: get version
         id: version
         uses: notiz-dev/github-action-json-property@release
@@ -26,10 +28,16 @@ jobs:
           path: 'plugin.json'
           prop_path: 'Version'
       - run: echo ${{steps.version.outputs.prop}}
+
       - name: Install dependencies
-        run: |
-          npm install
-          zip -r JWTDecoder.zip . -x '*.git*'
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Create zip archive
+        run: zip -r JWTDecoder.zip . -x '*.git' -x '.gitignore'
+
       - name: Publish
         uses: softprops/action-gh-release@v1
         with:
